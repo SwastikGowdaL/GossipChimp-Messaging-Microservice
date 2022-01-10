@@ -1,5 +1,4 @@
 require('../../db/mongoose');
-const messages = require('../../models/messages');
 const Message = require('../../models/messages');
 
 const saveUser = async (userID) => {
