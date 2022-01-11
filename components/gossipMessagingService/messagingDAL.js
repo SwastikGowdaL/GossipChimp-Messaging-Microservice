@@ -1,6 +1,16 @@
 require('../../db/mongoose');
 const Message = require('../../models/messages');
 
+const redisClient = require('./helpers/redisClient');
+
+let client;
+const DEFAULT_EXPIRATION = 86400;
+
+const connectRedis = async () => {
+  client = await redisClient();
+};
+connectRedis();
+
 const saveUser = async (userID) => {
   try {
     const newUser = new Message({
@@ -35,8 +45,17 @@ const saveMessage = async (userID, messengerID, message) =>
     }
   );
 
+const cacheSocketID = async (userID, socketID) => {
+  await client.SETEX(`${userID}_socketID`, DEFAULT_EXPIRATION, socketID);
+};
+
+const retrieveCachedSocketID = async (userID) =>
+  client.GET(`${userID}_socketID`);
+
 module.exports = {
   saveUser,
   saveMessengerID,
   saveMessage,
+  cacheSocketID,
+  retrieveCachedSocketID,
 };

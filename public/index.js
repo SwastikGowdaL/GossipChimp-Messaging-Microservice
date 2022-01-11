@@ -1,5 +1,9 @@
 const socket = io();
 
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+const userID = urlParams.get('id');
+
 const messagesContainer = document.getElementById('messages');
 
 const opMessage = (message) => {
@@ -16,9 +20,28 @@ const opMessage = (message) => {
   messagesContainer.prepend(div);
 };
 
-socket.emit('retrieveMessages', 'userID');
+const sendMessage = () => {
+  const senderID = document.getElementById('recipient').value;
+  const message = document.getElementById('sendMessage').value;
+  opMessage({ messenger_id: userID, data: message });
+  socket.emit('sendMessage', {
+    messenger_id: userID,
+    recipient_id: senderID,
+    data: message,
+  });
+};
+
+const sendBtn = document.getElementById('btn');
+sendBtn.addEventListener('click', () => {
+  sendMessage();
+});
+
+socket.emit('cacheUserID', userID);
 
 socket.on('messages', async (message) => {
-  console.log(message);
+  opMessage(message);
+});
+
+socket.on('receivedMessage', async (message) => {
   opMessage(message);
 });
