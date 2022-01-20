@@ -14,6 +14,26 @@ const groupSchema = new mongoose.Schema({
       type: String,
     },
   ],
+  messages: [
+    {
+      messenger_id: {
+        type: String,
+      },
+      time: {
+        type: Date,
+        default: Date.now,
+      },
+      pic: {
+        type: String,
+      },
+      audio: {
+        type: String,
+      },
+      data: {
+        type: String,
+      },
+    },
+  ],
 });
 
 const groups = mongoose.model('groups', groupSchema);
