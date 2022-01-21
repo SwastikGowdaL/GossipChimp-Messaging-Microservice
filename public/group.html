@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>messaging</title>
+    <title>group messaging</title>
 
     <div
       style="
@@ -14,21 +14,15 @@
         flex-direction: column;
       "
     >
-      <h1>Chat application</h1>
+      <h1>group Chat application</h1>
       <label>Message: <input type="text" id="sendMessage" /></label>
-      <label>Recipient: <input type="text" id="recipient" /></label>
       <button style="margin-top: 15px" id="btn">send</button>
 
       <div id="messages"></div>
-      <br />
-      <label
-        >Create Group : <input type="text" id="group" />
-        <button id="createGroup">Create</button>
-      </label>
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
-    <script src="index.js"></script>
+    <script src="group.js"></script>
   </head>
   <body></body>
 </html>

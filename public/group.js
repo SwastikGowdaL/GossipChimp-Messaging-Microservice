@@ -3,14 +3,11 @@ const socket = io();
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 const userID = urlParams.get('id');
-const createButton = document.getElementById('createGroup');
+const groupName = urlParams.get('groupName');
+
+socket.emit('createGroup', { userID, groupName });
 
 const messagesContainer = document.getElementById('messages');
-
-createButton.addEventListener('click', (e) => {
-  const groupName = document.getElementById('group').value;
-  window.location.href = `group.html?id=${userID}&groupName=${groupName}`;
-});
 
 const opMessage = (message) => {
   const div = document.createElement('div');
@@ -23,16 +20,15 @@ const opMessage = (message) => {
   div.style.padding = '3px';
   div.style.margin = '3px';
   div.style.border = '1px solid black';
-  messagesContainer.prepend(div);
+  messagesContainer.append(div);
 };
 
 const sendMessage = () => {
-  const senderID = document.getElementById('recipient').value;
   const message = document.getElementById('sendMessage').value;
   opMessage({ messenger_id: userID, data: message });
-  socket.emit('sendMessage', {
+  socket.emit('sendGroupMessage', {
     messenger_id: userID,
-    recipient_id: senderID,
+    groupName,
     data: message,
   });
 };
@@ -42,12 +38,16 @@ sendBtn.addEventListener('click', () => {
   sendMessage();
 });
 
-socket.emit('cacheUserID', userID);
+// socket.emit('cacheUserID', userID);
 
-socket.on('messages', async (message) => {
+// socket.on('messages', async (message) => {
+//   opMessage(message);
+// });
+
+socket.on('receivedGroupMessage', async (message) => {
   opMessage(message);
 });
 
-socket.on('receivedMessage', async (message) => {
-  opMessage(message);
+socket.on('created', async (message) => {
+  alert(message.message);
 });

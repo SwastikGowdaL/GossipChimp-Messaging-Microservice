@@ -37,6 +37,17 @@ io.on('connection', async (socket) => {
       received: true,
     });
   });
+
+  socket.on('createGroup', async (details) => {
+    socket.join(details.groupName);
+    socket.emit('created', { message: 'created successfully' });
+  });
+
+  socket.on('sendGroupMessage', async (details) => {
+    socket.broadcast
+      .to(details.groupName)
+      .emit('receivedGroupMessage', details);
+  });
 });
 
 http.listen(config.PORT, () => {
