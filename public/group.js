@@ -20,7 +20,7 @@ const opMessage = (message) => {
   div.style.padding = '3px';
   div.style.margin = '3px';
   div.style.border = '1px solid black';
-  messagesContainer.append(div);
+  messagesContainer.appendChild(div);
 };
 
 const sendMessage = () => {
